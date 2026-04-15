@@ -1,0 +1,227 @@
+<div id="zatemnenie" class="zatemnenie custom_container" *ngIf="showModal">
+  <div class="okno okno_fix_size p-3 my-3">
+    <h3>{{ isFormReadonly ? 'Просмотр заказа' : 'Новый заказ' }}</h3>
+    <form #orderForm="ngForm" (ngSubmit)="creatNewOrder()">
+      <div class="col d-flex flex-column gap-3">
+        <div class="row custom_container-data g-1">
+          <label class="form-label" id="orderId_h"
+            >Номер заказа (будет назначен автоматически)</label
+          >
+          <input
+            class="form-control"
+            type="text"
+            id="orderId"
+            [(ngModel)]="orderId"
+            [readonly]="true"
+            name="orderId"
+            *ngIf="orderId"
+          />
+
+          <label class="form-label">Город отправителя *</label>
+          <input
+            class="form-control"
+            type="text"
+            id="sender_city"
+            [(ngModel)]="sender_city"
+            [readonly]="isFormReadonly"
+            name="sender_city"
+            required
+            minlength="2"
+            maxlength="50"
+            #senderCity="ngModel"
+          />
+          <div
+            *ngIf="
+              !isFormReadonly && senderCity.invalid && (senderCity.dirty || senderCity.touched)
+            "
+            class="text-danger small"
+          >
+            <div *ngIf="senderCity.errors?.['required']">Город отправителя обязателен</div>
+            <div *ngIf="senderCity.errors?.['minlength']">Минимум 2 символа</div>
+            <div *ngIf="senderCity.errors?.['maxlength']">Максимум 50 символов</div>
+          </div>
+
+          <label class="form-label">Адрес отправителя *</label>
+          <input
+            class="form-control"
+            type="text"
+            id="sender_address"
+            [(ngModel)]="sender_address"
+            [readonly]="isFormReadonly"
+            name="sender_address"
+            required
+            minlength="5"
+            maxlength="100"
+            #senderAddress="ngModel"
+          />
+          <div
+            *ngIf="
+              !isFormReadonly &&
+              senderAddress.invalid &&
+              (senderAddress.dirty || senderAddress.touched)
+            "
+            class="text-danger small"
+          >
+            <div *ngIf="senderAddress.errors?.['required']">Адрес отправителя обязателен</div>
+            <div *ngIf="senderAddress.errors?.['minlength']">Минимум 5 символов</div>
+            <div *ngIf="senderAddress.errors?.['maxlength']">Максимум 100 символов</div>
+          </div>
+
+          <label class="form-label">Город получателя *</label>
+          <input
+            class="form-control"
+            type="text"
+            id="recipient_city"
+            [(ngModel)]="recipient_city"
+            [readonly]="isFormReadonly"
+            name="recipient_city"
+            required
+            minlength="2"
+            maxlength="50"
+            #recipientCity="ngModel"
+          />
+          <div
+            *ngIf="
+              !isFormReadonly &&
+              recipientCity.invalid &&
+              (recipientCity.dirty || recipientCity.touched)
+            "
+            class="text-danger small"
+          >
+            <div *ngIf="recipientCity.errors?.['required']">Город получателя обязателен</div>
+            <div *ngIf="recipientCity.errors?.['minlength']">Минимум 2 символа</div>
+            <div *ngIf="recipientCity.errors?.['maxlength']">Максимум 50 символов</div>
+          </div>
+
+          <label class="form-label">Адрес получателя *</label>
+          <input
+            class="form-control"
+            type="text"
+            id="recipient_address"
+            [(ngModel)]="recipient_address"
+            [readonly]="isFormReadonly"
+            name="recipient_address"
+            required
+            minlength="5"
+            maxlength="100"
+            #recipientAddress="ngModel"
+          />
+          <div
+            *ngIf="
+              !isFormReadonly &&
+              recipientAddress.invalid &&
+              (recipientAddress.dirty || recipientAddress.touched)
+            "
+            class="text-danger small"
+          >
+            <div *ngIf="recipientAddress.errors?.['required']">Адрес получателя обязателен</div>
+            <div *ngIf="recipientAddress.errors?.['minlength']">Минимум 5 символов</div>
+            <div *ngIf="recipientAddress.errors?.['maxlength']">Максимум 100 символов</div>
+          </div>
+
+          <label class="form-label">Вес груза (кг) *</label>
+          <input
+            class="form-control"
+            type="number"
+            id="weight"
+            [(ngModel)]="weight"
+            [readonly]="isFormReadonly"
+            name="weight"
+            required
+            min="0.1"
+            max="1000"
+            step="0.1"
+            #weightInput="ngModel"
+          />
+          <div
+            *ngIf="
+              !isFormReadonly && weightInput.invalid && (weightInput.dirty || weightInput.touched)
+            "
+            class="text-danger small"
+          >
+            <div *ngIf="weightInput.errors?.['required']">Вес груза обязателен</div>
+            <div *ngIf="weightInput.errors?.['min']">Минимальный вес: 0.1 кг</div>
+            <div *ngIf="weightInput.errors?.['max']">Максимальный вес: 1000 кг</div>
+          </div>
+
+          <label class="form-label">Дата получения груза *</label>
+          <input
+            class="form-control"
+            type="date"
+            id="date_cargo"
+            [(ngModel)]="date_cargo"
+            [readonly]="isFormReadonly"
+            name="date_cargo"
+            required
+            [min]="minDate"
+            #dateCargo="ngModel"
+          />
+          <div
+            *ngIf="!isFormReadonly && dateCargo.invalid && (dateCargo.dirty || dateCargo.touched)"
+            class="text-danger small"
+          >
+            <div *ngIf="dateCargo.errors?.['required']">Дата получения груза обязательна</div>
+            <div *ngIf="dateCargo.errors?.['min']">Дата не может быть в прошлом</div>
+          </div>
+        </div>
+        <div class="row g-2 gap-2">
+          <button
+            type="submit"
+            class="col btn btn-secondary btn-block"
+            [disabled]="isFormReadonly || orderForm.invalid"
+            *ngIf="!isFormReadonly"
+          >
+            Добавить заказ
+          </button>
+
+          <button type="button" class="col btn btn-secondary btn-block" (click)="closeModal()">
+            {{ isFormReadonly ? 'Закрыть' : 'Отмена' }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="okno_without_border p-3 my-3">
+  <header><h1>Список заказов</h1></header>
+  <section class="d-flex flex-row d-grid gap-3">
+    <div class="justify-content-center" id="list_orders_div">
+      <table class="table table-striped table-hover table-dark" id="list_orders_table">
+        <thead>
+          <tr>
+            <th>Номер</th>
+            <th>Город отправителя</th>
+            <th>Адрес отправителя</th>
+            <th>Город получателя</th>
+            <th>Адрес получателя</th>
+            <th>Вес груза</th>
+            <th>Дата получения груза</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let order of orders"
+            (click)="openOrderDetails(order)"
+            style="cursor: pointer"
+          >
+            <td>{{ order.id }}</td>
+            <td>{{ order.senderCity }}</td>
+            <td>{{ order.senderAddress }}</td>
+            <td>{{ order.recipientCity }}</td>
+            <td>{{ order.recipientAddress }}</td>
+            <td>{{ order.weight }} kg</td>
+            <td>{{ formatDate(order.dateCargo) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col d-flex flex-column gap-3">
+      <button (click)="openCreateOrderForm()" class="btn btn-secondary btn-block">
+        Добавить новый заказ
+      </button>
+
+      <button (click)="loadOrders()" class="btn btn-secondary btn-block">Обновить список</button>
+    </div>
+  </section>
+</div>

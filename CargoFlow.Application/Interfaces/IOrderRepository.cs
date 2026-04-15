@@ -17,4 +17,6 @@ public interface IOrderRepository
     Task<List<OrderDto>> GetByCustomerIdAsync(
         int customerId,
         CancellationToken cancellationToken = default);
+
+    Task<OrderDto?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
 }

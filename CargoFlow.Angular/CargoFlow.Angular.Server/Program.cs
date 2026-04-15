@@ -1,49 +1,39 @@
 using CargoFlow.Application;
 using CargoFlow.Infrastructure;
 
-namespace CargoFlow.WebApi;
 
-public class Program
+WebApplicationBuilder builder = WebApplication.CreateBuilder();
 {
-    public static void Main(string[] args)
-    {
-        WebApplicationBuilder builder = WebApplication.CreateBuilder();
-        {
-            // Add services to the container.
+    builder.Services.AddControllers();
 
-            builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 
-            builder.Services.AddSwaggerGen();
+    builder.Services.AddInfrastructure();
 
-            builder.Services.AddInfrastructure();
-
-            builder.Services.AddApplication();
-        }
-
-        WebApplication app = builder.Build();
-
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
-
-        if (app.Environment.IsProduction())
-        {
-            app.UseStaticFiles();
-            builder.Services.AddControllersWithViews();
-        }
-
-        app.UseHttpsRedirection();
-
-        app.MapControllers();
-
-        app.MapGet("/", () => Results.Redirect("/customer/authorization/"));
-
-        app.Run();
-    }
+    builder.Services.AddApplication();
 }
+
+WebApplication app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+if(app.Environment.IsProduction())
+{
+    app.UseDefaultFiles();
+    app.MapStaticAssets();
+}
+
+app.UseHttpsRedirection();
+
+app.MapControllers();
+
+app.MapFallbackToFile("/index.html");
+
+app.Run();

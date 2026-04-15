@@ -9,7 +9,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        services.AddSingleton<IApplicationDbContext>(new ApplicationContext());
+        services.AddScoped<IApplicationDbContext, ApplicationContext>();
 
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();

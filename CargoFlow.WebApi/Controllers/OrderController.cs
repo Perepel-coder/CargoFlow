@@ -63,7 +63,7 @@ public class OrderController : Controller
     {
         try
         {
-            GetOrdersForCustomerQuery query = new(ordersForCustomerRequest.customerId);
+            GetOrderByIdQuery query = new(ordersForCustomerRequest.customerId);
 
             List<OrderDto> orders = await _sender.Send(query);
 

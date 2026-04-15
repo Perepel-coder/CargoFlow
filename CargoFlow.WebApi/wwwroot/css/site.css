@@ -28,6 +28,10 @@ body {
     display: none;
 }
 
+    .zatemnenie:target {
+        display: block;
+    }
+
 .okno {
     width: 40%;
     height: 500px;
@@ -45,9 +49,7 @@ body {
     background: var(--main-color);
 }
 
-.zatemnenie:target {
-    display: block;
-}
+
 /*#endregion*/
 
 .authorization {

@@ -1,0 +1,52 @@
+<div id="authorization" class="custom_container">
+  <div id="okno" class="okno my-3">
+    <h3>Пожалуйста войдите в систему</h3>
+    <form #loginForm="ngForm">
+      <div class="col d-flex flex-column gap-3">
+        <div class="row custom_container-data g-1">
+          <label class="form-label">Логин</label>
+          <input class="form-control" type="text" [(ngModel)]="login" name="login" #loginInput="ngModel"
+                 required
+                 pattern="[a-zA-Z0-9_]+"
+                 minlength="3"
+                 maxlength="10">
+
+           <!-- Сообщения об ошибках для логина -->
+          <div *ngIf="loginInput.invalid && (loginInput.dirty || loginInput.touched)" class="text-danger small">
+            <div *ngIf="loginInput.errors?.['required']">
+              {{ authMessage.REQUIRED_FIELDS }}
+            </div>
+            <div *ngIf="loginInput.errors?.['pattern'] || loginInput.errors?.['minlength'] || loginInput.errors?.['maxlength']">
+              {{ authMessage.LOGIN_PATTERN }}
+            </div>
+          </div>
+
+          <label class="form-label">Пароль</label>
+          <input class="form-control"
+                 type="password"
+                 [(ngModel)]="password"
+                 name="password"
+                 #passwordInput="ngModel"
+                 required>
+
+           <!-- Сообщение об ошибке для пароля -->
+          <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)" class="text-danger small">
+            {{ authMessage.REQUIRED_FIELDS }}
+          </div>
+
+        </div>
+        <div class="row g-2 gap-2">
+          <button type="submit" class="col btn btn-secondary btn-block" (click)='check()'
+                  [disabled]="loginForm.invalid || isLoading">
+            Войти
+          </button>
+
+          <button type="submit" class="col btn btn-outline-secondary btn-block" (click)='create()'
+                  [disabled]="loginForm.invalid || passwordInput.invalid || isLoading">
+            Регистрация
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -17,12 +17,6 @@ public class OrderController : Controller
         _sender = sender ?? throw new ArgumentNullException(nameof(sender));
     }
 
-    [HttpGet("home/")]
-    public IActionResult Home()
-    {
-        return View();
-    }
-
     [HttpPost("home/create-order/")]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest orderRequest)
     {
@@ -82,6 +76,39 @@ public class OrderController : Controller
                     recipientAddress: o.RecipientAddress,
                     weight: o.Weight,
                     dateCargo: o.DateCargo)).ToList());
+
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("home/get-orders-by-id/")]
+    public async Task<IActionResult> GetOrderById([FromQuery] GetOrderByIdRequest getOrderByIdRequest)
+    {
+
+        try
+        {
+            GetOrderByIdQuery query = new(getOrderByIdRequest.id);
+
+            OrderDto order = await _sender.Send(query);
+
+            if (order == null)
+            {
+                return NotFound("No order found for the id");
+            }
+
+            GetOrderByIdResponse response = new(
+                id: order.Id,
+                customerId: order.CustomerId,
+                senderCity: order.SenderCity,
+                senderAddress: order.SenderAddress,
+                recipientCity: order.RecipientCity,
+                recipientAddress: order.RecipientAddress,
+                weight: order.Weight,
+                dateCargo: order.DateCargo);
 
             return Ok(response);
         }

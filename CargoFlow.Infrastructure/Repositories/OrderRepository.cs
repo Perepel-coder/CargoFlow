@@ -59,4 +59,21 @@ public class OrderRepository : IOrderRepository
                 o.DateCargo))
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<OrderDto?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        Order? order = await _context.Orders.SingleOrDefaultAsync(order => order.Id == id);
+
+        if (order == null)
+            return null;
+
+        return new OrderDto(order.Id,
+                order.CustomerId,
+                order.SenderCity,
+                order.SenderAddress,
+                order.RecipientCity,
+                order.RecipientAddress,
+                order.Weight,
+                order.DateCargo);
+    }
 }

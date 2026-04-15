@@ -1,0 +1,62 @@
+:root {
+  --dark-color: #212529;
+  --light-color: #ffffff;
+  --overlay-color: #66666680;
+}
+
+html {
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  margin-bottom: 60px;
+  background: var(--dark-color);
+  color: var(--light-color);
+}
+
+
+.okno {
+  width: 90%;
+  height: 90%;
+  text-align: center;
+  padding: 30px;
+  border: 3px solid var(--light-color);
+  border-radius: 10px;
+  color: var(--light-color);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  background: var(--dark-color);
+}
+
+.custom_container {
+  background: var(--overlay-color);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+
+  &-data {
+    & label {
+      text-align: left;
+      font-size: 16px;
+    }
+  }
+
+  & button {
+    font-size: 16px;
+  }
+}

@@ -15,12 +15,6 @@ public class CustomerController : Controller
         _sender = sender ?? throw new ArgumentNullException(nameof(sender));
     }
 
-    [HttpGet("authorization/")]
-    public IActionResult Authorization()
-    {
-        return View();
-    }
-
     [HttpPost("authorization/create-customer/")]
     public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerRequest customerRequest)
     {
